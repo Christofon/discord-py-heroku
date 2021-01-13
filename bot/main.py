@@ -23,7 +23,7 @@ async def neuesTurnier(ctx):
 
     await ctx.guild.create_voice_channel(tournament_name)
     await ctx.send(msg.author) 
-#    channel = ctx.utils.find(lambda x: x.name == tournament_name, ctx.guild.server.channels)
+    channel = ctx.utils.find(lambda x: x.name == tournament_name, ctx.guild.server.channels)
 #    creator = ctx.utils.find(lambda x: x.name == msg.author, ctx)
   
     await ctx.send(channel) 
