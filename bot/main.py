@@ -22,8 +22,10 @@ async def neuesTurnier(ctx):
     tournament_name = msg.content
 
     await ctx.guild.create_voice_channel(tournament_name)
-
-    await ctx.move_member(msg.author, tournament_name)
+  
+    channel = ctx.utils.find(lambda x: x.name == tournament_name, message.server.channels)
+  
+    await ctx.move_member(msg.author, channel)
 
 if __name__ == "__main__":
     bot.run(TOKEN)
