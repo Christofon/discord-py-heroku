@@ -11,6 +11,9 @@ async def on_ready():
 @bot.command()
 async def ping(ctx):
     await ctx.send("pong")
+    channel = await guild.create_voice_channel('cool-channel')
+   
+
 
 if __name__ == "__main__":
     bot.run(TOKEN)
