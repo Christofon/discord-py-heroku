@@ -11,7 +11,7 @@ async def on_ready():
 @bot.command()
 async def ping(ctx):
     await ctx.send("pong")
-   
+@bot.command()   
 async def neuesTurnier(ctx):
     await ctx.send(f"Gib dem Turnier einen Namen:")
 
