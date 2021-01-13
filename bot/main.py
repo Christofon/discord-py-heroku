@@ -11,7 +11,7 @@ async def on_ready():
 @bot.command()
 async def ping(ctx):
     await ctx.send("pong")
-    await guild.create_voice_channel('cool-channel'
+    await guild.create_voice_channel('cool-channel')
    
 
 
