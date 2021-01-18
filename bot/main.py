@@ -31,7 +31,6 @@ async def openTeam(ctx):
     await ctx.guild.create_voice_channel(team_name)
     
     teams_dict.update({team_name: [msg.author.name]})
-    print(teams_dict)
     
     await ctx.send(f"Das Team {team_name} wurde erstellt.")
     
@@ -43,7 +42,7 @@ async def openTeam(ctx):
 
 @bot.command()
 async def joinTeam(ctx):
-    ctx.send(f"Welchen Team möchtest du beitreten?")
+    await ctx.send(f"Welchen Team möchtest du beitreten?")
     
     def check(msg):
         return msg.author == ctx.author
@@ -56,7 +55,9 @@ async def joinTeam(ctx):
     
     # TODO versuchen ob das so funktioniert
     if len(teams_dict[team_name]) < 4:
-        teams_dict.update({team_name: [msg.author.name]})
+        te = teams_dict[team_name]
+        te.append(msg.author.name)
+        teams_dict.update({team_name: te})
         await creator.move_to(channel)
         await ctx.send(f"Du bist dem dem Team {team_name} beigetreten")
     else:
@@ -75,17 +76,41 @@ async def leaveTeam(ctx):
 
     member = msg.author.name.split("#", 1)
     member_list = teams_dict[team_name]
-    for i in member_list:
-        if member[0] == i:
-            member_list.remove(i)
     
-    teams_dict.update({team_name: member_list})
-
-    await ctx.send("Du hast das Team verlassen")
-
-    if len(teams_dict[team_name]) < 1:
+    channel = discord.utils.find(lambda x: x.name == team_name, ctx.guild.channels)
+   
+    # TODO works?
+    if len(teams_dict[team_name]) == 1 and member == teams_dict[team_name][0]:
+        await channel.delete() 
         teams_dict.pop(team_name)
+        await ctx.send("Du hast das Team verlassen")
         await ctx.send("Das Team wurde geschlossen")
+    else:
+        for i in member_list:
+            if member[0] == i:
+                member_list.remove(i)
+        teams_dict.update({team_name: member_list})
+        await ctx.send("Du hast das Team verlassen")
+
+@bot.command()
+# TODO need real role name
+@bot.commands.has_role("Administrator")
+async def deleteTeam(ctx):
+    await ctx.send(f"Welches Team soll gelöscht werden?")
+    
+    def check(msg):
+        return msg.author == ctx.author
+
+    msg = await bot.wait_for("message", check=check)
+    team_name = msg.content
+
+    channel = discord.utils.find(lambda x: x.name == team_name, ctx.guild.channels)
+    
+    await channel.delete() 
+    teams_dict.pop(team_name)
+    await ctx.send("Das Team wurde gelöscht")
+
+# TODO implement way to track points in tournament, ask for specifics
 
 @bot.command()
 async def teams(ctx):
