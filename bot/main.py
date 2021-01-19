@@ -94,7 +94,6 @@ async def leaveTeam(ctx):
 
 @bot.command()
 # TODO need real role name
-@bot.commands.has_role("Administrator")
 async def deleteTeam(ctx):
     await ctx.send(f"Welches Team soll gelöscht werden?")
     
